@@ -1,13 +1,12 @@
-# Create a new simulator instance
 set ns [new Simulator]
 
-# Open files for NAM and trace output
+
 set nf [open lab2.nam w]
 $ns namtrace-all $nf
 set tf [open lab2.tr w]
 $ns trace-all $tf
 
-# Create nodes
+
 set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
@@ -15,17 +14,15 @@ set n3 [$ns node]
 set n4 [$ns node]
 set n5 [$ns node]
 
-# Set the shape of node n4 for visualization
 $n4 shape box
 
-# Define duplex links between nodes with bandwidth, delay, and queue management
 $ns duplex-link $n0 $n4 1005Mb 1ms DropTail
 $ns duplex-link $n1 $n4 50Mb 1ms DropTail
 $ns duplex-link $n2 $n4 2000Mb 1ms DropTail
 $ns duplex-link $n3 $n4 200Mb 1ms DropTail
 $ns duplex-link $n4 $n5 1Mb 1ms DropTail
 
-# Create ping agents and attach them to nodes
+
 set p1 [new Agent/Ping]
 $ns attach-agent $n0 $p1
 $p1 set packetSize_ 50000
@@ -50,17 +47,17 @@ $ns queue-limit $n0 $n4 5
 $ns queue-limit $n2 $n4 3b
 $ns queue-limit $n4 $n5 2
 
-# Define the behavior for ping agent responses
+
 Agent/Ping instproc recv {from rtt} {
     $self instvar node_
     puts "node [$node_ id] received answer from $from with round trip time $rtt msec"
 }
 
-# Connect ping agents to simulate communication
+
 $ns connect $p1 $p5
 $ns connect $p3 $p4
 
-# Finish procedure
+
 proc finish { } {
     global ns nf tf
     $ns flush-trace
@@ -130,7 +127,6 @@ $ns at 2.8 "$p3 send"
 $ns at 2.9 "$p3 send"
 
 $ns at 3.0 "finish"
-# Run the simulation
 $ns run
 
 
