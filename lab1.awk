@@ -1,5 +1,3 @@
-# AWK script to count packet drops and print details
-
 BEGIN {
     c = 0;
 }
